@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="X-UA-Compatible" content="ie=edge"><link rel="shortcut icon" href="/img/icons/favicon.png" type="image/png"><link rel="stylesheet" href="css/style.min.css"><title>Способ доставки</title></head><body><section class="deliveryMethod"><h2 class="delivery__title">Выберите способ доставки</h2><div class="delivery__tabs"><div class="delivery_tab active_tab delivery">Доставка</div><div class="delivery_tab places">Самовывоз</div></div><form class="delivery__form" action="#"><label for="name">ФИО <img class="alert_icon" src="img/icons/alert_icon.svg" alt="Внимание"> <input class="form_input" id="name" type="text" placeholder="Только кириллица" required> <span class="name_alert">Допустимы только кириллица, пробел, тире</span></label> <label for="tel">Телефон <img class="alert_icon" src="img/icons/alert_icon.svg" alt="Внимание"> <input class="form_input" id="tel" type="tel" pattern="[+]7\s[\(]\d{3}[\)]\s\d{3}[\-]\d{2}[\-]\d{2}" title="Используйте формат: +7 (777) 777-77-77" required placeholder="+7 (___) ___-__-__"> <span class="tel_alert">Допустимы +, круглые скобки и цифры, соблюдайте маску ввода</span></label> <label for="address">Адрес доставки <img class="alert_icon" src="img/icons/alert_icon.svg" alt="Внимание"> <input class="form_input" id="address" type="text" placeholder="Город, улица, дом" minlength="5" required></label> <label for="comment">Комментарий <textarea class="form_input" id="comment" rows="4" minlength="5" required></textarea></label> <button class="form_button">Оформить заказ</button></form><div class="delivery__places"><div class="radio_wrapper"><div class="radio"><input class="delivery__radio" type="radio" id="firstAdress" value="firstAdress" name="deliveryAdress" checked="checked"> <label for="firstAdress">Пункт выдачи заказов Песчаная ул., д. 13</label></div><div class="radio"><input class="delivery__radio" type="radio" id="secondAdress" value="secondAdress" name="deliveryAdress"> <label for="secondAdress">Пункт выдачи заказов Подсосенский пер., д. 11</label></div></div><div id="map"></div><button class="form_button">Оформить заказ</button></div></section><!-- 167a9c0b-3aec-4e67-bbe9-78b2fa9bfcf3 --><script src="js/scrypt.js"></script><script src="https://api-maps.yandex.ru/2.1/?apikey=167a9c0b-3aec-4e67-bbe9-78b2fa9bfcf3&lang=ru_RU"></script><script>ymaps.ready(init);
+        function init(){
+
+            //Массив маркеров, сюда при необходимости можно добавлять метки для отображения на карте
+            // Широта, долгота, текст по наведению на маркер, текст по клику на маркер
+            var points = [
+                ["55.801059", "37.508186", 'Доступный адрес доставки', 'Пункт выдачи заказов Песчаная ул., д. 13'],
+                ["55.757516", "37.651640", 'Доступный адрес доставки', 'Пункт выдачи заказов Песчаная ул., д. 13']
+                ];
+                
+            var myCollection = new ymaps.GeoObjectCollection()
+
+            var myMap = new ymaps.Map("map", {
+                center: [55.753259, 37.620067],
+                zoom: 10,
+                controls: []
+            });
+
+            // Перебираем в цикле точки, которые надо добавить на карту
+            setTimeout(() => {
+                for (i = 0; i < points.length; i++ ){
+                var myPlacemark = new ymaps.Placemark([
+                points[i][0], points[i][1]
+            ], {
+                hintContent: points[i][2],
+                balloonContent: points[i][3]},
+                {
+                iconLayout: 'default#image',
+                iconImageHref: 'img/icons/marcer__icon.svg',
+                iconImageSize: [34, 40],
+                iconImageOffset: [-5, -38]
+                });
+           
+            myCollection.add(myPlacemark);
+            }
+
+            myMap.geoObjects.add( myCollection );	
+            	
+            myMap.setBounds(myCollection.getBounds());
+            }, 1000);
+
+            // отключение скрола на тач устройствах
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+            myMap.behaviors.disable('drag');
+        }
+    }</script></body></html>
